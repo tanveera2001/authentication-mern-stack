@@ -13,10 +13,7 @@ const generateTokenAndSetCookie = (res, userId) => {
             maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days 
         });
 
-        console.log("JWT token generated and cookie set successfully.");
-
     } catch (err) {
-        console.error("Error generating token or setting cookie:", err);
         throw err; 
     }
 

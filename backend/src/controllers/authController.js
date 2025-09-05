@@ -1,34 +1,31 @@
 
+require("dotenv").config();
 const User = require("../models/userModel");
-const { sendVerificationEmail } = require("../services/emails");
+const bcryptjs = require("bcryptjs");
+const crypto = require("crypto");
+const { sendVerificationEmail, sendWelcomeEmail, sendPasswordResetEmail, sendResetSuccessEmail } = require("../services/emails");
 const generateTokenAndSetCookie = require("../utils/generateTokenAndSetCookie");
 const { successResponse } = require("./responseController");
+const AppError = require("../utils/appError");
 
 const signup = async (req, res, next) => {
     const { email, password, name } = req.body;
-    console.log(`Email: ${email}, Password: ${password}, Name: ${name}`);
 
     try {
-        if(!email || !password || !name) {
-            throw new Error("All fields are required.");
-        }
-
         const userAlreadyExists = await User.findOne({ email }); 
-        console.log("Existing User:", userAlreadyExists);
 
-        if(userAlreadyExists) throw new Error("User already exists!");
+        if(userAlreadyExists) throw new AppError("User already exists!", 400); // 400-Bad Request
 
-        const verificationToken = Math.floor(100000 + Math.random() * 900000)
+        const hashedPassword = await bcryptjs.hash(password, 10); 
+        const verificationToken = Math.floor(100000 + Math.random() * 900000);
 
         const user = await User.create({
             email,
-            password,
+            password: hashedPassword,
             name,
             verificationToken,
             verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
         });
-
-        console.log("Created User:", user);
 
         generateTokenAndSetCookie(res, user._id);
 
@@ -40,29 +37,138 @@ const signup = async (req, res, next) => {
         });
 
     } catch (err) {
-        console.error("Error caught in signup controller:", err);
         next(err);    
     }
 }; 
 
-const verifyEmail = (req, res) => {
-    res.send("verify api is running properly.");
+const verifyEmail = async (req, res, next) => {
+    const { code } = req.body;
+
+    try {
+        const user = await User.findOne({
+            verificationToken: code,
+            verificationTokenExpiresAt: {$gt: Date.now()},
+        });
+
+        if(!user) throw new AppError("Invalid or expired verification code", 400); // Bad Request
+
+        user.isVerified = true;
+        user.verificationToken = undefined;
+        user.verificationTokenExpiresAt = undefined;
+
+        await user.save();
+
+        await sendWelcomeEmail(user.email, user.name);
+
+        return successResponse (res, {
+            statusCode: 200,
+            message: "Email verified successfully",
+        });
+        
+    } catch (err) {
+        next(err);
+        
+    }
 };
 
-const login = (req, res) => {
-    res.send("Login api is running properly.");
+const login = async (req, res, next) => {
+    const { email, password } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+
+        if(!user) throw new AppError("Invalid email or password", 400); 
+
+        const isPasswordValid = await bcryptjs.compare(password, user.password);
+        
+        if(!isPasswordValid) throw new AppError("Invalid email or password", 400);
+
+        generateTokenAndSetCookie(res, user._id); 
+
+        user.lastLogin = new Date();
+
+        await user.save();
+
+        return successResponse(res, {
+            statusCode: 200,
+            message: "Logged in successfully",
+        });
+        
+        
+    } catch (err) {
+        next(err);
+    }
 };
 
 const logout = (req, res) => {
-    res.send("Logout api is running properly");
+    res.clearCookie("token");
+    return successResponse(res, {
+        statusCode: 200,
+        message: "Logged out successfully",
+    });
+
 };
 
-const forgotPassword = (req, res) => {
-    res.send("Forgor password api is running correctly.");
+const forgotPassword = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+
+        if(!email) throw new AppError("User not Found", 400);
+
+        const resetToken = crypto.randomBytes(20).toString("hex");
+
+        const resetTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000; // 1 hour
+
+        user.resetPasswordToken = resetToken;
+
+        user.resetPasswordExpiresAt = resetTokenExpiresAt;
+
+        await user.save();
+
+        await sendPasswordResetEmail(user.email, `${process.env.CLIENT_URL}/reset-password/${resetToken}`);
+
+        return successResponse(res, {
+            statusCode: 200,
+            message: "Password reset link sent to your email",
+        });
+        
+    } catch (err) {
+        next(err);
+    }
 };
 
-const resetPassword = (req, res) => {
-    res.send("Reset password api is running correctly.");
+const resetPassword = async (req, res, next) => {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    try {
+        const user = await User.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpiresAt: { $gt: Date.now() },
+        });
+
+        if (!user) throw new AppError("Invalid or expired reset token", 400);
+
+        const hashedPassword = await bcryptjs.hash(password, 10);
+
+        user.password = hashedPassword;
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpiresAt = undefined;
+
+        await user.save();
+
+        await sendResetSuccessEmail(user.email);
+
+        return successResponse(res, {
+            statusCode: 200,
+            message: "Password reset successful",
+        });
+
+    } catch (err) {
+        next(err);
+    }
 };
 
 module.exports = { signup, verifyEmail, login, logout, forgotPassword, resetPassword };
