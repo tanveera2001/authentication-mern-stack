@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const authRouter = require("./routers/authRouter");
 const globalErrorHandler = require("./middleware/globalErrorHandler");
+const customCors = require("./config/cors");
 
 const app = express();
 
@@ -11,6 +12,7 @@ const app = express();
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(cookieParser());
+app.use(customCors);
 
 // 📁 Public Static Files
 
