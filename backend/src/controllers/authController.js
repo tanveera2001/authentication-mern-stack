@@ -100,13 +100,23 @@ const login = async (req, res, next) => {
     }
 };
 
-const logout = (req, res) => {
-    res.clearCookie("token");
-    return successResponse(res, {
-        statusCode: 200,
-        message: "Logged out successfully",
-    });
+const logout = (req, res, next) => {
+    try {
+        if (!req.cookies?.token) {
+            return successResponse(res, {
+                statusCode: 200,
+                message: "No active session, nothing to log out",
+            });
+        }
 
+        res.clearCookie("token");
+        return successResponse(res, {
+            statusCode: 200,
+            message: "Logged out successfully",
+        });
+    } catch (err) {
+        next(err);
+    }
 };
 
 const forgotPassword = async (req, res) => {

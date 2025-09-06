@@ -1,6 +1,7 @@
 
 const express = require("express");
 const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
 const authRouter = require("./routers/authRouter");
 const globalErrorHandler = require("./middleware/globalErrorHandler");
 
@@ -9,6 +10,7 @@ const app = express();
 // Global Middlewares
 app.use(morgan("dev"));
 app.use(express.json());
+app.use(cookieParser());
 
 // 📁 Public Static Files
 
