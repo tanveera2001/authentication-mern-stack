@@ -6,6 +6,7 @@ import EmailVerificationPage from "./pages/auth/EmailVerificationPage";
 import LoginPage from "./pages/auth/LoginPage";
 import ForgotPasswordPage from "./pages/auth/ForgotPasswordPage";
 import ResetPasswordPage from "./pages/auth/ResetPasswordPage";
+import DashboardPage from "./pages/DashboardPage";
 
 
 
@@ -21,6 +22,11 @@ const App = () => {
           <Route path='/reset-password/:token' element={ <ResetPasswordPage /> } />
         </Route>
       </Routes>
+
+      <Routes>
+        <Route path="/" element={ <DashboardPage /> } />
+      </Routes>
+        
     </div>
   );
 };
