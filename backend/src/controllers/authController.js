@@ -33,7 +33,7 @@ const signup = async (req, res, next) => {
 
         return successResponse(res, {
             statusCode: 201,
-            message: "User registered successfully!"
+            message: "User registered successfully!",
         });
 
     } catch (err) {
@@ -63,11 +63,14 @@ const verifyEmail = async (req, res, next) => {
         return successResponse (res, {
             statusCode: 200,
             message: "Email verified successfully",
+            user: {
+                ...user._doc,
+                password: undefined,
+            },
         });
         
     } catch (err) {
-        next(err);
-        
+        next(err);        
     }
 };
 
@@ -181,4 +184,20 @@ const resetPassword = async (req, res, next) => {
     }
 };
 
-module.exports = { signup, verifyEmail, login, logout, forgotPassword, resetPassword };
+const CheckAuth = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.userId).select("-password");
+
+        if(!user) throw new AppError("User not found", 400);
+
+        return successResponse(res, {
+            statusCode: 200,
+            message: "User is authenticated",
+            data: { user }
+        });
+    } catch (err) {
+        next(err);
+    }
+}
+
+module.exports = { signup, verifyEmail, login, logout, forgotPassword, resetPassword, CheckAuth };

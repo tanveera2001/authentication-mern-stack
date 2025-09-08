@@ -1,17 +1,15 @@
 
-const { validationResult } = require("express-validator");
+const { validationResult } = require("express-validator"); 
+const AppError = require("../utils/appError"); 
 
-const validateResult = (req, res, next) => {
+const validateResult = (req, res, next) => { 
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
-        const err = new Error("Validation failed");
-        err.statusCode = 422;
-        err.errors = errors.array().map(error => ({ field: error.param, message: error.msg }));
-        return next(err); // passes to global error handler
+        return next(new AppError(errors.array()[0].msg, 422));
     }
 
-    next(); // continue if validation passes
+    next(); 
 };
 
 module.exports = validateResult;

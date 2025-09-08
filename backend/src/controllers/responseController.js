@@ -1,8 +1,9 @@
 
-const successResponse = (res, { statusCode = 200, message = "Request processed successfully" }) => {
+const successResponse = (res, { statusCode = 200, message = "Request processed successfully", user = null }) => {
     return res.status(statusCode).json({
         success: true, 
         message: message, 
+        ...(user && { user }),
     });
 };
 

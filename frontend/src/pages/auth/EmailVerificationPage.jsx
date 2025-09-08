@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/authStore";
-import toast from "react-hot-toast";
 
 const EmailVerificationPage = () => {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
+  const [formError, setFormError] = useState("");
   const inputRefs = useRef([]);
   const navigate = useNavigate();
 
-  const {verifyEmail, error, isLoading } = useAuthStore();
+  const { verifyEmail, error, isLoading } = useAuthStore();
 
   const handleChange = (index, value) => {
     const newCode = [...code];
@@ -46,21 +46,16 @@ const EmailVerificationPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const verificationCode = code.join("");
-    try {
-      await verifyEmail(verificationCode);
-      navigate("/");
-      toast.success("Email verified successfully");
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
-  useEffect(() => {
-    if (code.every((digit) => digit !== "")) {
-      handleSubmit(new Event("submit"));
-    }
-  }, [code]);
+    const verificationCode = code.join("");
+
+    if (!/^\d{6}$/.test(verificationCode)) return setFormError("Code must be 6 digits and numeric");
+
+    setFormError("");
+
+    const success = await verifyEmail(verificationCode);
+    if (success) navigate("/");
+  };
 
   return (
     <div>
@@ -88,14 +83,16 @@ const EmailVerificationPage = () => {
           ))}
         </div>
 
-        {error && (
-          <p className="text-red-400 font-medium mt-2 text-center">{error}</p>
+        {(formError || error) && (
+          <p className="text-red-400 font-medium mt-2 text-center">
+            {formError || error}
+          </p>
         )}
 
         <button
           type="submit"
           disabled={isLoading || code.some((digit) => !digit)}
-          className="w-full py-2 px-4 bg-[#1853bd] text-white font-semibold rounded-lg shadow-lg hover:bg-[#133b8c] transition disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full py-2 px-4 bg-[#1853bd] text-white font-semibold rounded-lg shadow-lg hover:bg-[#133b8c] transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
           {isLoading ? "Verifying..." : "Verify Email"}
         </button>

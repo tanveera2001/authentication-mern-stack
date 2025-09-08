@@ -8,21 +8,41 @@ const SignUpPage = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [formError, setFormError] = useState("");
+
     const { signup, error, isLoading } = useAuthStore();
     const navigate = useNavigate();
+
+    const passwordRules = {
+        minLength: password.length >=6,
+        hasUpper: /[A-Z]/.test(password),
+        hasLower: /[a-z]/.test(password),
+        hasNumber: /[0-9]/.test(password),
+        hasSpecial: /[^A-Za-z0-9]/.test(password),
+    };
+
+    const isPasswordValid = passwordRules.minLength && passwordRules.hasUpper && passwordRules.hasLower && passwordRules.hasNumber && passwordRules.hasSpecial;
 
     const handleSignUp = async (e) => {
         e.preventDefault();
 
-        try {
-            await signup(email, password, name);
+        if(!name.trim()) return setFormError("Name is required");
+        if(!email.trim()) return setFormError("Email is required");
+        if(!/\S+@\S+\.\S+/.test(email)) return setFormError("Please enter a valid email address");
+        if(!isPasswordValid) return setFormError("Password does not meet all requirements");
 
-            navigate("/verify-email");
+        setFormError("");
 
-        } catch (error) {
-            console.log(error);
-        }
+        const success = await signup(email, password, name);
+        if(success) navigate("/verify-email");
     };
+
+    const renderRule = (isValid, text) => (
+        <li className="flex items-center gap-1">
+            {isValid ? <Check className="w-4 h-4 text-[#23bfd5]" /> : <X className="w-4 h-4 text-gray-400" />}
+            <span className={isValid ? "text-[#23bfd5]" : "text-gray-400"}>{text}</span>
+        </li>
+    );
 
     return (
         <div>
@@ -56,61 +76,16 @@ const SignUpPage = () => {
                 />
 
                 <ul className="text-sm mt-2 mb-4 space-y-1">
-                    <li className="flex items-center gap-1">
-                        {password.length >= 6 ? (
-                            <Check className="w-4 h-4 text-[#23bfd5]" />
-                        ) : (
-                            <X className="w-4 h-4 text-gray-400" />
-                        )}
-                        <span className={password.length >= 6 ? "text-[#23bfd5]" : "text-gray-400"}>
-                            At least 6 characters
-                        </span>
-                    </li>
-                    <li className="flex items-center gap-1">
-                        {/[A-Z]/.test(password) ? (
-                            <Check className="w-4 h-4 text-[#23bfd5]" />
-                        ) : (
-                            <X className="w-4 h-4 text-gray-400" />
-                        )}
-                        <span className={/[A-Z]/.test(password) ? "text-[#23bfd5]" : "text-gray-400"}>
-                            Contains uppercase letter
-                        </span>
-                    </li>
-                    <li className="flex items-center gap-1">
-                        {/[a-z]/.test(password) ? (
-                            <Check className="w-4 h-4 text-[#23bfd5]" />
-                        ) : (
-                            <X className="w-4 h-4 text-gray-400" />
-                        )}
-                        <span className={/[a-z]/.test(password) ? "text-[#23bfd5]" : "text-gray-400"}>
-                            Contains lowercase letter
-                        </span>
-                    </li>
-                    <li className="flex items-center gap-1">
-                        {/[0-9]/.test(password) ? (
-                            <Check className="w-4 h-4 text-[#23bfd5]" />
-                        ) : (
-                            <X className="w-4 h-4 text-gray-400" />
-                        )}
-                        <span className={/[0-9]/.test(password) ? "text-[#23bfd5]" : "text-gray-400"}>
-                            Contains a number
-                        </span>
-                    </li>
-                    <li className="flex items-center gap-1">
-                        {/[!@#$%^&*(),.?":{}|<>]/.test(password) ? (
-                            <Check className="w-4 h-4 text-[#23bfd5]" />
-                        ) : (
-                            <X className="w-4 h-4 text-gray-400" />
-                        )}
-                        <span className={/[!@#$%^&*(),.?":{}|<>]/.test(password) ? "text-[#23bfd5]" : "text-gray-400"}>
-                            Contains special character
-                        </span>
-                    </li>
+                    {renderRule(passwordRules.minLength, "At least 6 characters")}
+                    {renderRule(passwordRules.hasUpper, "Contains uppercase letter")}
+                    {renderRule(passwordRules.hasLower, "Contains lowercase letter")}
+                    {renderRule(passwordRules.hasNumber, "Contains a number")}
+                    {renderRule(passwordRules.hasSpecial, "Contains special character")}
                 </ul>
 
-                {error && (
+                {(formError || error) && (
                     <p className="text-red-400 font-medium mt-2 text-center">
-                        {error}
+                        {formError || error}
                     </p>
                 )}
 
