@@ -77,7 +77,7 @@ const EmailVerificationPage = () => {
               value={digit}
               onChange={(e) => handleChange(index, e.target.value)}
               onKeyDown={(e) => handleKeyDown(index, e)}
-              onPaste={(e) => handlePaste(e, index)} // 👈 Added paste handler
+              onPaste={(e) => handlePaste(e, index)} 
               className="w-12 h-12 text-center text-2xl font-bold bg-white/80 text-[#071741] border border-[#1853bd]/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#23bfd5] focus:border-[#23bfd5] transition"
             />
           ))}
@@ -92,7 +92,7 @@ const EmailVerificationPage = () => {
         <button
           type="submit"
           disabled={isLoading || code.some((digit) => !digit)}
-          className="w-full py-2 px-4 bg-[#1853bd] text-white font-semibold rounded-lg shadow-lg hover:bg-[#133b8c] transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+          className="mt-5 w-full py-2 px-4 bg-[#1853bd] text-white font-semibold rounded-lg shadow-lg hover:bg-[#133b8c] transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
         >
           {isLoading ? "Verifying..." : "Verify Email"}
         </button>

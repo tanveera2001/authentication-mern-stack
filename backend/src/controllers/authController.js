@@ -14,17 +14,17 @@ const signup = async (req, res, next) => {
     try {
         const userAlreadyExists = await User.findOne({ email }); 
 
-        if(userAlreadyExists) throw new AppError("User already exists!", 400); // 400-Bad Request
+        if (userAlreadyExists) throw new AppError("User already exists!", 400);
 
         const hashedPassword = await bcryptjs.hash(password, 10); 
-        const verificationToken = Math.floor(100000 + Math.random() * 900000);
+        const verificationToken = Math.floor(100000 + Math.random() * 900000); 
 
         const user = await User.create({
             email,
             password: hashedPassword,
             name,
             verificationToken,
-            verificationTokenExpiresAt: Date.now() + 24 * 60 * 60 * 1000, // 24 hours
+            verificationTokenExpiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24 hours
         });
 
         generateTokenAndSetCookie(res, user._id);
@@ -34,12 +34,16 @@ const signup = async (req, res, next) => {
         return successResponse(res, {
             statusCode: 201,
             message: "User registered successfully!",
+            user: {
+                ...user._doc,
+                password: undefined,
+            }
         });
 
     } catch (err) {
         next(err);    
     }
-}; 
+};
 
 const verifyEmail = async (req, res, next) => {
     const { code } = req.body;
@@ -95,6 +99,10 @@ const login = async (req, res, next) => {
         return successResponse(res, {
             statusCode: 200,
             message: "Logged in successfully",
+            user: {
+                ...user._doc,
+                password: undefined,
+            }
         });
         
         
@@ -122,21 +130,18 @@ const logout = (req, res, next) => {
     }
 };
 
-const forgotPassword = async (req, res) => {
+const forgotPassword = async (req, res, next) => {
     const { email } = req.body;
 
     try {
         const user = await User.findOne({ email });
 
-        if(!email) throw new AppError("User not Found", 400);
+        if (!user) throw new AppError("User not found!", 400);
 
         const resetToken = crypto.randomBytes(20).toString("hex");
 
-        const resetTokenExpiresAt = Date.now() + 1 * 60 * 60 * 1000; // 1 hour
-
         user.resetPasswordToken = resetToken;
-
-        user.resetPasswordExpiresAt = resetTokenExpiresAt;
+        user.resetPasswordExpiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
         await user.save();
 
@@ -157,6 +162,12 @@ const resetPassword = async (req, res, next) => {
     const { password } = req.body;
 
     try {
+
+        if(!password || !confirmPassword) throw new AppError("Password and confirm password are required", 400);
+
+        if(password !== confirmPassword) throw new AppError("Passwords do not match", 400);
+
+
         const user = await User.findOne({
             resetPasswordToken: token,
             resetPasswordExpiresAt: { $gt: Date.now() },
@@ -176,8 +187,8 @@ const resetPassword = async (req, res, next) => {
 
         return successResponse(res, {
             statusCode: 200,
-            message: "Password reset successful",
-        });
+            message: "Password reset successful", 
+        }); 
 
     } catch (err) {
         next(err);
@@ -198,6 +209,6 @@ const CheckAuth = async (req, res, next) => {
     } catch (err) {
         next(err);
     }
-}
+};
 
 module.exports = { signup, verifyEmail, login, logout, forgotPassword, resetPassword, CheckAuth };

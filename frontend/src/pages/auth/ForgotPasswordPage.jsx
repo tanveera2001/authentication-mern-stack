@@ -7,13 +7,18 @@ import useAuthStore from "../../store/authStore";
 const ForgotPasswordPage = () => {
 	const [email, setEmail] = useState("");
 	const [isSubmitted, setIsSubmitted] = useState(false);
-
-	const { isLoading, forgotPassword } = useAuthStore();
+	const [formError, setFormError] = useState("");
+	const { isLoading, forgotPassword, error } = useAuthStore();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		await forgotPassword(email);
-		setIsSubmitted(true);
+
+		if (!email.trim()) return setFormError("Email is required");
+
+		setFormError("");
+
+		const success = await forgotPassword(email);
+		if (success) setIsSubmitted(true);
 	};
 
 	return (
@@ -24,7 +29,7 @@ const ForgotPasswordPage = () => {
 
 			{!isSubmitted ? (
 				<form onSubmit={handleSubmit}>
-					<p className="text-center text-[#4c648c] mb-6">
+					<p className="text-center text-gray-400 mb-6">
 						Enter your email address and we'll send you a link to reset your password.
 					</p>
 
@@ -34,15 +39,20 @@ const ForgotPasswordPage = () => {
 						placeholder="Email Address"
 						value={email}
 						onChange={(e) => setEmail(e.target.value)}
-						required
 					/>
+
+					{(formError || error) && (
+						<p className="text-red-400 font-medium mt-2 text-center">
+							{formError || error}
+						</p>
+					)}
 
 					<button
 						type="submit"
 						disabled={isLoading}
-						className="w-full py-2 px-4 bg-[#1853bd] text-white font-semibold 
+						className="mt-5 w-full py-2 px-4 bg-[#1853bd] text-white font-semibold 
 							rounded-lg shadow-lg hover:bg-[#133b8c] transition 
-							disabled:opacity-50 disabled:cursor-not-allowed"
+							disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
 					>
 						{isLoading ? (
 							<Loader className="w-6 h-6 animate-spin mx-auto" />
@@ -56,7 +66,7 @@ const ForgotPasswordPage = () => {
 					<div className="w-16 h-16 bg-[#23bfd5] rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
 						<Mail className="h-8 w-8 text-white" />
 					</div>
-					<p className="text-[#4c648c] mb-6">
+					<p className="text-gray-400 mb-6">
 						If an account exists for <strong>{email}</strong>, you will receive a password reset link shortly.
 					</p>
 				</div>
@@ -65,7 +75,7 @@ const ForgotPasswordPage = () => {
 			<div className="mt-6 text-center">
 				<Link
 					to="/login"
-					className="text-sm text-[#4c648c] hover:text-[#23bfd5] hover:underline flex items-center justify-center transition font-medium"
+					className="text-sm text-gray-400 hover:text-[#23bfd5] hover:underline flex items-center justify-center transition font-medium"
 				>
 					<ArrowLeft className="h-4 w-4 mr-2" /> Back to Login
 				</Link>

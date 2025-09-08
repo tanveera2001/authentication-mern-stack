@@ -9,17 +9,21 @@ import useAuthStore from "../../store/authStore";
 const LoginPage = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [formError, setFormError] = useState("");
 	const { login, isLoading, error } = useAuthStore();
-  const navigate = useNavigate();
+	const navigate = useNavigate();
 
-const handleLogin = async (e) => {
-  e.preventDefault();
-  const success = await login(email, password);
+	const handleLogin = async (e) => {
+		e.preventDefault();
 
-  if (success) {
-    navigate("/");
-  }
-};
+		if(!email.trim()) return setFormError("Email is required");
+		if(!password.trim()) return setFormError("Password is required");
+
+		setFormError("");
+
+		const success = await login(email, password);
+		if (success) navigate("/");
+	};
 
 	return (
 		<div>
@@ -52,14 +56,16 @@ const handleLogin = async (e) => {
 					</Link>
 				</div>
 
-				{error && (
-					<p className="text-red-400 font-medium mb-2 text-center">{error}</p>
-				)}
+				{(formError || error) && (
+                	<p className="text-red-400 font-medium mt-2 text-center">
+                        {formError || error}
+                	</p>
+                )}
 
 				<button
 					type="submit"
 					disabled={isLoading}
-					className="w-full py-2 px-4 bg-[#1853bd] text-white font-semibold rounded-lg shadow-lg hover:bg-[#133b8c] transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+					className="mt-5 w-full py-2 px-4 bg-[#1853bd] text-white font-semibold rounded-lg shadow-lg hover:bg-[#133b8c] transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
 				>
 					{isLoading ? (
 						<Loader className="w-6 h-6 animate-spin mx-auto" />

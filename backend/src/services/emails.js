@@ -30,8 +30,8 @@ const sendWelcomeEmail = async (email, name) => {
 
 const sendPasswordResetEmail = async (email, resetURL) => {
     try {
-        await transporter.sendMail({
-            from: sender,
+        await transporter.sendMail({ 
+            from: sender, 
             to: email,
             subject: "Reset your password",
             html: PASSWORD_RESET_REQUEST_TEMPLATE(resetURL),
