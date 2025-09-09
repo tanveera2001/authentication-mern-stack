@@ -24,8 +24,17 @@ const ProtectedRoute = ({ children }) => {
 const RedirectAuthenticatedUser = ({ children }) => {
 	const { isAuthenticated, user } = useAuthStore();
 
-	if (isAuthenticated && user.isVerified) return <Navigate to='/' replace />;
+	if (isAuthenticated && user?.isVerified) return <Navigate to='/' replace />;
 	return children;
+};
+
+const UnverifiedRoute = ({ children }) => {
+  const { isAuthenticated, user } = useAuthStore();
+
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  if (user?.isVerified) return <Navigate to="/" replace />;
+
+  return children;
 };
 
 
@@ -36,11 +45,13 @@ const App = () => {
     checkAuth();
   }, [checkAuth]);
 
-  if (isCheckingAuth) return <div className="text-center mt-20 text-white">Loading...</div>;
+  if (isCheckingAuth)
+    return <div className="text-center mt-20 text-white">Loading...</div>;
 
   return (
     <div>
       <Routes>
+        {/* Auth Layout Pages */}
         <Route element={<AuthLayout />}>
           <Route
             path="/signup"
@@ -53,7 +64,9 @@ const App = () => {
           <Route
             path="/verify-email"
             element={
+              <UnverifiedRoute>
                 <EmailVerificationPage />
+              </UnverifiedRoute>
             }
           />
           <Route
@@ -82,6 +95,7 @@ const App = () => {
           />
         </Route>
 
+        {/* Protected Dashboard */}
         <Route
           path="/"
           element={
@@ -90,7 +104,8 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        {/* catch all */}
+
+        {/* Catch All */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
