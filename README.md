@@ -66,7 +66,7 @@ A **full-stack authentication system** built with the **MERN stack**. Includes *
 | **Backend / API** | ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white) ![Express](https://img.shields.io/badge/Express-000000?style=for-the-badge&logo=express&logoColor=white) ![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=jsonwebtokens&logoColor=white) |
 | **Database** | ![MongoDB](https://img.shields.io/badge/MongoDB-47A248?style=for-the-badge&logo=mongodb&logoColor=white) |
 | **Email / Communication** | ![Mailtrap](https://img.shields.io/badge/Mailtrap-009688?style=for-the-badge&logo=mailtrap&logoColor=white) |
-| **Deployment / Hosting** | Local Development (future plan: Vercel/Render) |
+| **Deployment / Hosting** | Local Development (future plan: Vercel) |
 
 ---
 
