@@ -1,5 +1,5 @@
-import useAuthStore from "../store/authStore";
 
+import useAuthStore from "../store/authStore";
 
 const DashboardPage = () => {
 	const { user, logout } = useAuthStore();
@@ -8,7 +8,6 @@ const DashboardPage = () => {
 		logout();
 	};
 
-	// Format date directly in this file
 	const formatDate = (dateString) => {
 		const date = new Date(dateString);
 		if (isNaN(date.getTime())) {
@@ -25,35 +24,40 @@ const DashboardPage = () => {
 	};
 
 	return (
-		<div className="max-w-md w-full mx-auto mt-20 p-8 bg-white border border-[#fcbf49] rounded-lg shadow-lg">
-			<h2 className="text-3xl font-bold mb-6 text-center text-[#d62828]">
-				Dashboard
+		<div className="max-w-3xl mx-auto mt-16 p-10 bg-gradient-to-br from-[#23bfd5]/10 to-[#1853bd]/10 rounded-2xl shadow-xl border border-[#23bfd5]/30">
+
+			<h2 className="text-4xl font-extrabold mb-10 text-center text-[#1853bd] tracking-wide drop-shadow">
+				Welcome, {user?.name || "User"} 👋
 			</h2>
 
-			<div className="space-y-6">
-				<div className="p-4 bg-white/70 backdrop-blur-md rounded-lg border border-[#b3b3b3]">
-					<h3 className="text-xl font-semibold text-[#3a5a40] mb-3">Profile Information</h3>
-					<p className="text-[#111]">Name: {user.name}</p>
-					<p className="text-[#111]">Email: {user.email}</p>
+			<div className="grid md:grid-cols-2 gap-8">
+				<div className="p-6 bg-white rounded-xl shadow-md border-l-4 border-[#1853bd]">
+					<h3 className="text-xl font-semibold text-[#133b8c] mb-3">Profile</h3>
+					<p className="text-gray-700">
+						<span className="font-bold">Name: </span>{user.name}
+					</p>
+					<p className="text-gray-700">
+						<span className="font-bold">Email: </span>{user.email}
+					</p>
 				</div>
 
-				<div className="p-4 bg-white/70 backdrop-blur-md rounded-lg border border-[#b3b3b3]">
-					<h3 className="text-xl font-semibold text-[#3a5a40] mb-3">Account Activity</h3>
-					<p className="text-[#111]">
+				<div className="p-6 bg-white rounded-xl shadow-md border-l-4 border-[#1853bd]">
+					<h3 className="text-xl font-semibold text-[#133b8c] mb-3">Account Activity</h3>
+					<p className="text-gray-700">
 						<span className="font-bold">Joined: </span>
-						{formatDate(user.createdAt)}
+						{user.createdAt ? formatDate(user.createdAt) : "N/A"}
 					</p>
-					<p className="text-[#111]">
+					<p className="text-gray-700">
 						<span className="font-bold">Last Login: </span>
-						{formatDate(user.lastLogin)}
+						{user.lastLogin ? formatDate(user.lastLogin) : "Never"}
 					</p>
 				</div>
 			</div>
 
-			<div className="mt-6">
+			<div className="mt-10 text-center">
 				<button
 					onClick={handleLogout}
-					className="w-full py-3 px-4 bg-[#d62828] text-white font-bold rounded-lg shadow hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-[#3a5a40] focus:ring-offset-2 transition duration-200"
+					className="px-8 py-3 bg-[#1853bd] text-white font-semibold rounded-lg shadow-lg hover:bg-[#133b8c] transition duration-200 cursor-pointer"
 				>
 					Logout
 				</button>

@@ -7,7 +7,10 @@ const normalizeUser = (user) => {
     id: user._id || user.id,
     email: user.email,
     name: user.name,
-    isVerified: user.isVerified ?? false, // always boolean
+    isVerified: user.isVerified ?? false,
+    createdAt: user.createdAt || null,
+    lastLogin: user.lastLogin || null,
+    updatedAt: user.updatedAt || null,
   };
 };
 
