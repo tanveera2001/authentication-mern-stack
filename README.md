@@ -120,5 +120,5 @@ A **full-stack authentication system** built with the **MERN stack**. Includes *
 **[Tanveer Ahmed]**
 
 - 📧 Email: [tanveera2001@gmail.com](mailto:tanveera2001@gmail.com)  
-- 💼 LinkedIn: [https://www.linkedin.com/in/md-tanveer-ahmed-23b06023b/](https://www.linkedin.com/in/md-tanveer-ahmed-23b06023b/)  
+- 💼 LinkedIn: [https://www.linkedin.com/in/tanveerahmed22/](https://www.linkedin.com/in/tanveerahmed22/)  
 - 💻 GitHub: [https://github.com/tanveera2001](https://github.com/tanveera2001)  
