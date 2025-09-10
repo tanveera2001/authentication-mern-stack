@@ -92,6 +92,14 @@ A **full-stack authentication system** built with the **MERN stack**. Includes *
 **Dashboard:**  
 ![Dashboard](images-readme/auth-dashboard.png)  
 
+**Emails:**
+<p float="left"> 
+  <img src="images-readme/verify-your-email.png" width="180" alt="Verify Your Email" />
+  <img src="images-readme/welcome-message.png" width="180" alt="Welcome Message" /> 
+  <img src="images-readme/password-reset.png" width="180" alt="Password Reset" /> 
+  <img src="images-readme/password-reset-successful.png" width="180" alt="Password Reset Successful" /> 
+</p>
+
 ---
 
 ## ⚙️ Installation & Setup
