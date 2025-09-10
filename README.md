@@ -84,6 +84,7 @@ A **full-stack authentication system** built with the **MERN stack**. Includes *
 
 **Forgot Password:**  
 ![Forgot Password](images-readme/auth-forgot.png)  
+![Forgot Password](images-readme/auth-forgot-2.png)
 
 **Reset Password:**  
 ![Reset Password](images-readme/auth-reset.png)  
