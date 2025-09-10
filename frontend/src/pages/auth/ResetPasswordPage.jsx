@@ -32,7 +32,7 @@ const ResetPasswordPage = () => {
 		setFormError("");
 
 
-		const success = await resetPassword(token, password);
+		const success = await resetPassword(token, password, confirmPassword);
 		if (success) navigate("/login");
 	};
 

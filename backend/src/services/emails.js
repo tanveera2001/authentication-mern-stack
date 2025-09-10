@@ -48,7 +48,7 @@ const sendResetSuccessEmail = async (email) => {
             from: sender,
             to: email,
             subject: "Password Reset Successful",
-            html: PASSWORD_RESET_SUCCESS_TEMPLATE,
+            html: PASSWORD_RESET_SUCCESS_TEMPLATE(),
         });
     } catch (err) {
         throw err;

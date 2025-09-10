@@ -127,10 +127,10 @@ const useAuthStore = create((set) => ({
     }
   },
 
-  resetPassword: async (token, password) => {
+  resetPassword: async (token, password, confirmPassword) => {
     set({ isLoading: true, error: null });
     try {
-      await api.post(`/api/auth/reset-password/${token}`, { password });
+      await api.post(`/api/auth/reset-password/${token}`, { password, confirmPassword });
       set({ isLoading: false });
       return true;
     } catch (error) {
