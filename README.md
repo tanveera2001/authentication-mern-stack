@@ -1,4 +1,4 @@
-# 🔐 Authentication MERN Stack – Tanveer Ahmed
+# 🔐 Authentication MERN Stack
 
 ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=white)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwind-css&logoColor=white)
