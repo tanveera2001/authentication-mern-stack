@@ -25,7 +25,7 @@ A **full-stack authentication system** built with the **MERN stack**. Includes *
 - [📝 Problems & Solutions](#-problems--solutions)
 - [🛠 Tech Stack](#-tech-stack)
 - [📸 Screenshots](#-screenshots)
-- [⚙️ Installation & Setup](#-installation--setup)
+- [⚙️ Installation & Setup](#installation-and-setup)
 - [📡 API Endpoints](#-api-endpoints)
 - [📌 Future Improvements](#-future-improvements)
 - [👤 Author](#-author)
@@ -100,7 +100,7 @@ A **full-stack authentication system** built with the **MERN stack**. Includes *
 
 ---
 
-## ⚙️ Installation & Setup
+## ⚙️ Installation and Setup
 
 1. **Clone the repo**
 
