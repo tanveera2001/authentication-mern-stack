@@ -99,10 +99,10 @@ A **full-stack authentication system** built with the **MERN stack**. Includes *
 | POST   | /api/auth/signup          | Register new user |
 | POST   | /api/auth/verify-email    | Verify email with 6-digit code |
 | POST   | /api/auth/login           | Login user |
+| POST   | /api/auth/logout          | Logout user |
 | POST   | /api/auth/forgot-password | Send reset link |
 | POST   | /api/auth/reset-password/:token | Reset user password |
-| GET    | /api/auth/me              | Get logged-in user details |
-| POST   | /api/auth/logout          | Logout user |
+| GET    | /api/auth/check-auth      | Check if user is authenticated |
 
 ---
 
