@@ -100,7 +100,7 @@ A **full-stack authentication system** built with the **MERN stack**. Includes *
 
 ---
 
-## ⚙️ Installation and Setup
+## Installation and Setup
 
 1. **Clone the repo**
 
