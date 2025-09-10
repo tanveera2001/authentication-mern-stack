@@ -25,7 +25,7 @@ A **full-stack authentication system** built with the **MERN stack**. Includes *
 - [📝 Problems & Solutions](#-problems--solutions)
 - [🛠 Tech Stack](#-tech-stack)
 - [📸 Screenshots](#-screenshots)
-- [⚙️ Installation & Setup](#installation--setup)
+- [⚙️ Installation & Setup](#-installation--setup)
 - [📡 API Endpoints](#-api-endpoints)
 - [📌 Future Improvements](#-future-improvements)
 - [👤 Author](#-author)
@@ -92,7 +92,6 @@ A **full-stack authentication system** built with the **MERN stack**. Includes *
 **Dashboard:**  
 ![Dashboard](images-readme/auth-dashboard.png)  
 
-**Emails:**
 **Emails:**  
 ![Verify Your Email](images-readme/verify-your-email.png)  
 ![Welcome Message](images-readme/welcome-message.png)  
