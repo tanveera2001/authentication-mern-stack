@@ -25,6 +25,7 @@ A **full-stack authentication system** built with the **MERN stack**. Includes *
 - [📝 Problems & Solutions](#-problems--solutions)
 - [🛠 Tech Stack](#-tech-stack)
 - [📸 Screenshots](#-screenshots)
+- [⚙️ Installation & Setup](#-installation--setup)
 - [📡 API Endpoints](#-api-endpoints)
 - [📌 Future Improvements](#-future-improvements)
 - [👤 Author](#-author)
@@ -91,6 +92,62 @@ A **full-stack authentication system** built with the **MERN stack**. Includes *
 ![Dashboard](images-readme/auth-dashboard.png)  
 
 ---
+
+## ⚙️ Installation & Setup
+
+1. **Clone the repo**
+
+    ```bash
+    git clone https://github.com/tanveera2001/authentication-mern-stack.git
+    cd authentication-mern-stack
+    ```
+2. **Set up environment variables**
+   ```bash
+    SERVER_PORT=500
+    MONGODB_ATLAS_URL=your_mongodb_connection_string_he
+    FRONTEND_URL=http://localhost:5173
+    SENDGRID_API_KEY=your_sendgrid_api_key_here
+    PORTFOLIO_EMAIL_TO=your-email@example.com
+    PORTFOLIO_EMAIL_FROM=from-email@example.com
+   ```
+
+3. **Install dependencies**
+
+   - **Backend:**  
+     Go to the **frontend** folder and run:
+     ```bash
+     npm install
+     ```
+     
+   - **Frontend:**  
+     Go to the **backend** folder and run:
+     ```bash
+     npm install
+     ```
+
+4. **Run the development server**
+
+   - **Backend:**  
+    In the **backend** folder, run:
+     ```bash
+     npm run dev
+     ```
+     
+   - **Frontend:**  
+     In the frontend folder, run:
+     ```bash
+     npm run dev
+     ```
+
+
+5. Open the app in your browser at:
+
+    ```
+    http://localhost:5173
+    ```
+
+---
+
 
 ## 📡 API Endpoints  
 
