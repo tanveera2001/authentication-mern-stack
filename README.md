@@ -45,15 +45,17 @@ A **full-stack authentication system** built with the **MERN stack**. Includes *
 
 ## 📝 Problems & Solutions  
 
-1. **Problem:** Password validation wasn’t working consistently.  
+1. **Problem:** When loading the dashboard, it showed a **white screen**.  
+   **Solution:** Solved it by **normalizing the user** in both the **frontend (authStore)** and **backend (authController)** so that user data was always consistent and available before rendering.  
+
+2. **Problem:** Password validation wasn’t working consistently.  
    **Solution:** Added **password rules (minLength, uppercase, lowercase, number, special char)** and real-time feedback for the user.  
 
-2. **Problem:** Email verification input was tricky for UX.  
+3. **Problem:** Email verification input was tricky for UX.  
    **Solution:** Used **auto-focus navigation** between 6 OTP fields, plus **paste support** for the code.  
 
-3. **Problem:** Reset password flow sometimes failed with expired tokens.  
+4. **Problem:** Reset password flow sometimes failed with expired tokens.  
    **Solution:** Implemented **token validation and expiry check** in backend, showing user-friendly errors.  
-
 ---
 
 ## 🛠 Tech Stack  
